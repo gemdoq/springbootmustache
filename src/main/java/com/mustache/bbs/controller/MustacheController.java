@@ -7,16 +7,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class MustacheController {
-    @GetMapping(value = "/hi")
-    public String mustacheCon(Model model) {
-        model.addAttribute("username", "rok");
-        return "greetings";
-    }
-
-    @GetMapping(value = "/hi/{id}")
-    public String mustacheCon2(@PathVariable String id, Model model) {
-        model.addAttribute("username", "rok");
-        model.addAttribute("id", id);
+    @GetMapping(value = {"/hi", "/hi/{id}"})
+    public String mustacheConWithPathVariable(Model model, @PathVariable(value = "id", required = false) String id) {
+        model.addAttribute("username", "choi");
+        if (id == null) {
+            model.addAttribute("id", "");
+        }
         return "greetings";
     }
 }
