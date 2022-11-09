@@ -1,15 +1,14 @@
-package com.mustache.bbs.domain.dto;
+package com.mustache.bbs3.domain.dto;
 
-import com.mustache.bbs.domain.entity.Article;
+import com.mustache.bbs3.domain.entity.Article;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-@Getter
 @AllArgsConstructor
+@Getter
 @ToString
 public class ArticleDto {
-    private Long id;
     private String title;
     private String content;
 
