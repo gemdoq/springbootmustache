@@ -44,10 +44,10 @@ public class ArticleController {
 
     @GetMapping("/{id}")
     public String getSingleArticle(@PathVariable("id") Long id, Model model) {
-        Optional<Article> optArticle = articleRepository.findById(id);
+        Optional<Article> optionalArticle = articleRepository.findById(id);
 
-        if(optArticle.isPresent()) {
-            Article article = optArticle.get();
+        if(optionalArticle.isPresent()) {
+            Article article = optionalArticle.get();
             model.addAttribute("article", article);
             return "articles/show";
         } else {
@@ -55,12 +55,40 @@ public class ArticleController {
         }
     }
 
+    @GetMapping("/{id}/edit")
+    public String editArticle(@PathVariable Long id, Model model) {
+        Optional<Article> optionalArticle = articleRepository.findById(id);
+
+        if (optionalArticle.isPresent()) {
+            Article article = optionalArticle.get();
+            model.addAttribute("article", article);
+            return "articles/edit";
+        } else {
+            model.addAttribute("message", String.format("%d가 없습니다.", id));
+            return "articles/error";
+        }
+    }
+
+    @GetMapping("/{id}/delete")
+    public String deleteArticle(@PathVariable Long id, Model model) {
+        articleRepository.deleteById(id);
+        model.addAttribute("message", String.format("id:%d번 글이 지워졌습니다.", id));
+        return "articles/show";
+    }
+
+    @PostMapping("/{id}/update")
+    public String update(@PathVariable Long id, ArticleDto articleDto, Model model) {
+        log.info("title:{} content:{}", articleDto.getTitle(), articleDto.getContent());
+        Article updatedArticle = articleRepository.save(articleDto.toEntity());
+        model.addAttribute("article", updatedArticle);
+        return String.format("redirect:/articles/%d", updatedArticle.getId());
+    }
+
     @PostMapping("")
     public String createArticle(ArticleDto articleDto) {
         log.info(articleDto.toString());
         Article savedArticle = articleRepository.save(articleDto.toEntity());
         log.info("generatedId:{}", savedArticle.getId());
-
         return String.format("redirect:/articles/%d", savedArticle.getId());
     }
 }

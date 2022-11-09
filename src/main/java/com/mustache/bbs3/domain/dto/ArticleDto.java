@@ -9,10 +9,11 @@ import lombok.ToString;
 @Getter
 @ToString
 public class ArticleDto {
+    private Long id;
     private String title;
     private String content;
 
     public Article toEntity() {
-        return new Article(title, content);
+        return new Article(this.id, this.title, this.content);
     }
 }
